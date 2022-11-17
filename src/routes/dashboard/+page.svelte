@@ -1,219 +1,24 @@
 <script>
-	import {
-		Header,
-		Table,
-		Grid,
-		GridItem,
-		Row,
-		TableRow,
-		TableCell,
-		Column100,
-		Card,
-		showLoading,
-		hideLoading,
-		Spinner,
-		Tag
-	} from 'bubbles-ui';
-	// import sections from '$assets/utils/sidebar-sections'; //Just for the demo, since there is a search element here
+	import { Header, Row, Spinner, Tag } from 'bubbles-ui';
 	let loading = null;
 
-	import icon_ship from '$lib/images/apps/ship-icon.svg';
-	import icon_receive from '$lib/images/apps/receive-icon.svg';
 	import icon_locations from '$lib/images/apps/locations-icon.svg';
-	import icon_directory from '$lib/images/apps/directory-icon.svg';
-	import icon_deliver from '$lib/images/apps/deliver-icon.svg';
-	import icon_inventory from '$lib/images/apps/inventory-icon.svg';
-	import icon_logs from '$lib/images/apps/logs-icon.svg';
-	import icon_workflows from '$lib/images/apps/workflows-icon.svg';
-	import icon_track from '$lib/images/apps/track-icon.svg';
-	import icon_settings from '$lib/images/apps/settings-icon.svg';
-	import img from '$lib/images/apps/settings-icon.svg';
-
-	let user = {};
 
 	let apps = [
-		{
-			name: 'Ship',
-			href: import.meta.env.VITE_APPS_SHIPPING,
-			icon: icon_ship,
-			id: 'ship',
-			tag: user?.onboarded_apps?.includes('ship')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('ship') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('ship') ? 'primary-lightest' : null
-				  },
-			active: true,
-			hidden: false
-		},
-		{
-			name: 'Receive',
-			href: `${import.meta.env.VITE_APPS_RECEIVE}/login?email=&platform=cloud`,
-			icon: icon_receive,
-			id: 'receive',
-			tag: null,
-			// tag: user?.onboarded_apps?.includes("receive")
-			//   ? null
-			//   : {
-			//       label: !user?.onboarded_apps?.includes("receive") ? "New" : null,
-			//       color: !user?.onboarded_apps?.includes("receive") ? "primary-lightest" : null,
-			//     },
-			active: import.meta.env.VITE_APPS_RECEIVE ? true : false,
-			hidden: false
-		},
-		{
-			name: 'Track',
-			href: import.meta.env.VITE_APPS_TRACK || '/dashboard/sales',
-			icon: icon_track,
-			id: 'track',
-			tag: user?.onboarded_apps?.includes('track')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('track') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('track') ? 'primary-lightest' : null
-				  },
-			active: import.meta.env.VITE_APPS_TRACK ? true : false,
-			hidden: false
-		},
-		{
-			name: 'Inventory',
-			href: import.meta.env.VITE_APPS_INVENTORY || '/dashboard/sales',
-			icon: icon_inventory,
-			id: 'inventory',
-			tag: user?.onboarded_apps?.includes('inventory')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('inventory') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('inventory') ? 'primary-lightest' : null
-				  },
-			active: import.meta.env.VITE_APPS_INVENTORY,
-			hidden: false
-		},
-		{
-			name: 'Deliver',
-			href: import.meta.env.VITE_APPS_DELIVER || '/dashboard/sales',
-			icon: icon_deliver,
-			id: 'deliver',
-			tag: user?.onboarded_apps?.includes('deliver')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('deliver') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('deliver') ? 'primary-lightest' : null
-				  },
-			active: import.meta.env.VITE_APPS_DELIVER ? true : false,
-			hidden: false
-		},
 		{
 			name: 'Locations',
 			href: import.meta.env.VITE_APPS_LOCATIONS || '/dashboard/sales',
 			icon: icon_locations,
 			id: 'locations',
-			tag: user?.onboarded_apps?.includes('locations')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('locations') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('locations') ? 'primary-lightest' : null
-				  },
-			active: import.meta.env.VITE_APPS_LOCATIONS ? true : false,
-			hidden: false
-		},
-		{
-			name: 'Contacts',
-			href: import.meta.env.VITE_APPS_CONTACTS || '/dashboard/sales',
-			icon: icon_directory,
-			id: 'contacts',
-			tag: user?.onboarded_apps?.includes('contacts')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('contacts') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('contacts') ? 'primary-lightest' : null
-				  },
-			active: import.meta.env.VITE_APPS_CONTACTS ? true : false,
-			hidden: false
-		},
-		{
-			name: 'Workflows',
-			href: import.meta.env.VITE_APPS_WORKFLOWS || '/dashboard/sales',
-			icon: icon_workflows,
-			id: 'workflows',
-			tag: user?.onboarded_apps?.includes('workflows')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('workflows') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('workflows') ? 'primary-lightest' : null
-				  },
-			active: import.meta.env.VITE_APPS_WORKFLOWS,
-			hidden: false
-		},
-		{
-			name: 'Logs',
-			href: import.meta.env.VITE_APPS_LOGS || '/dashboard/sales',
-			icon: icon_logs,
-			id: 'logs',
-			tag: user?.onboarded_apps?.includes('logs')
-				? null
-				: {
-						label: !user?.onboarded_apps?.includes('logs') ? 'New' : null,
-						color: !user?.onboarded_apps?.includes('logs') ? 'primary-lightest' : null
-				  },
-			active: import.meta.env.VITE_APPS_LOGS,
-			hidden: false
-		},
-		{
-			name: 'Settings',
-			href: '/settings',
-			icon: icon_settings,
-			id: 'settings',
-			tag: null,
 			active: true,
 			hidden: false
 		}
 	];
-
-	console.log(apps);
 </script>
 
 <Header title="PackageX Cloud" breadcrumbs={true} />
-<Row>
-	<Column100>
-		<Card>
-			<Table>
-				<TableRow href="/locations">
-					<TableCell
-						text="Add Your First Location"
-						large={true}
-						caption="Locations are used to keep track of users, inventory levels, and more."
-					/>
-					<TableCell
-						tag={{ label: 'Pending', color: 'warning-lightest' }}
-						align="right"
-						width="min"
-					/>
-					<TableCell button width="min" />
-				</TableRow>
-
-				<TableRow href="/dashboard/payments/payment-methods">
-					<TableCell
-						text="Add Payment Information"
-						large={true}
-						caption="While our apps have free tiers, we will need payment information on file."
-					/>
-					<TableCell
-						tag={{ label: 'Pending', color: 'warning-lightest' }}
-						align="right"
-						width="min"
-					/>
-					<TableCell button width="min" />
-				</TableRow>
-			</Table>
-		</Card>
-	</Column100>
-</Row>
 
 <section>
-	<Grid max_columns={5} min_columns={2} row_gap={4} column_gap={4}>
-		<GridItem>sdasdasdsadas</GridItem>
-	</Grid>
 	<Row>
 		<div class="grid">
 			{#each apps as app (app.id)}
@@ -284,6 +89,7 @@
 		transition: all 0.1s ease;
 		transition: transform 0.4s;
 		width: 100%;
+		padding: 20px;
 	}
 
 	.card__wrapper {
